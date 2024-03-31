@@ -1,0 +1,14 @@
+@import url("profile/profile.css");
+@import url("about/about.css");
+@import url("chart/chart.css");
+@import url("course/course.css");
+@import url("layout_bank/layout_bank.css");
+@import url("nav/nav.css");
+@import url("main-button/main-button.css");
+
+/* Для всёх заголовках */
+h2{
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 50px;
+}

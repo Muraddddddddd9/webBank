@@ -1,0 +1,14 @@
+<div class="avatar-container">
+    <div class="avatar">
+        <img src="<?= $_SESSION['user']['avatar'] ?>" alt="">
+    </div>
+    <div class="links">
+        <h2><?= $_SESSION['user']['full_name'] ?></h2>
+    </div>
+    <div class="email-links">
+        <?= $_SESSION['user']['email'] ?>
+    </div>
+    <div class="logout-link">
+        <a href="vendor/logout.php"><span class="material-symbols-outlined">logout</span> Выход</a>
+    </div>
+</div>

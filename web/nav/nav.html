@@ -1,0 +1,53 @@
+<div class="menu-icon" id="menu-icon">
+  <button class="button-nav" id="button-nav" type="button" onclick="mobileNav()" style="all: unset">
+      <span class="material-symbols-outlined" id="icon_nav_text">menu</span>
+  </button>
+</div>
+
+<aside class="sidebar" id="sidebar">
+  <ul class="links">
+
+    <li onclick="showMainTab()">
+      <span class="material-symbols-outlined">account_balance</span>
+      <a href="#" >Bank</a>
+    </li>
+
+    <li onclick="showCourseTab()">
+      <span class="material-symbols-outlined">currency_exchange</span>
+      <a href="#" >Course</a>
+    </li>
+
+    <hr>
+
+    <li onclick="showChartTab('Столбчатая', 'myChart')">
+      <span class="material-symbols-outlined">bar_chart</span>
+      <a href="#">Bar</a>
+    </li>
+
+    <li onclick="showChartTab('Круговая', 'myChart')">
+      <span class="material-symbols-outlined">pie_chart</span>
+      <a href="#">Pie</a>
+    </li>
+    
+    <li onclick="showChartTab('Линейная', 'myChart')">
+      <span class="material-symbols-outlined">Stacked_Line_chart</span>
+      <a href="#">Line</a>
+    </li>
+    
+    <hr>
+
+    <li onclick="showAboutUsTab()">
+      <span class="material-symbols-outlined">help</span>
+      <a href="#" >About</a>
+    </li>
+
+    <hr>
+
+    <li onclick="showProfileTab()">
+      <span class="material-symbols-outlined">home</span>
+      <a href="#" >Home</a>
+    </li>
+
+  </ul>
+</aside>
+

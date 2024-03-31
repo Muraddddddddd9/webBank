@@ -1,230 +1,312 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Получение данных пользователя из localStorage
-    const userDataJSON = localStorage.getItem('userData');
-    if (userDataJSON) {
-        const userData = JSON.parse(userDataJSON);
-        // Используйте данные пользователя по вашему усмотрению
-        console.log('Данные пользователя:', userData);
+// Функции для файла nav.html
+// Переход по страницам
+function showProfileTab(){
+    document.getElementById('profile').style.display = 'block';
+    document.getElementById('mainTab').style.display = 'none';
+    document.getElementById('course').style.display = 'none';
+    document.getElementById('chartTab').style.display = 'none';
+    document.getElementById('aboutTab').style.display = 'none';
+    closeSidebar();
+}
+
+function showMainTab() {
+    document.getElementById('profile').style.display = 'none';
+    document.getElementById('mainTab').style.display = 'block';
+    document.getElementById('course').style.display = 'none';
+    document.getElementById('chartTab').style.display = 'none';
+    document.getElementById('aboutTab').style.display = 'none';
+    closeSidebar();
+}
+    
+function showChartTab(title, containerId) {
+    document.getElementById('profile').style.display = 'none';
+    document.getElementById('mainTab').style.display = 'none';
+    document.getElementById('course').style.display = 'none';
+    document.getElementById('chartTab').style.display = 'block';
+    document.getElementById('aboutTab').style.display = 'none';
+    showModal(title, containerId)
+    closeSidebar();
+    // updateChart();
+}
+
+function showCourseTab(){
+    document.getElementById('profile').style.display = 'none';
+    document.getElementById('mainTab').style.display = 'none';
+    document.getElementById('course').style.display = 'block';
+    document.getElementById('chartTab').style.display = 'none';
+    document.getElementById('aboutTab').style.display = 'none';
+    closeSidebar();
+}
+
+function showAboutUsTab(){
+    document.getElementById('profile').style.display = 'none';
+    document.getElementById('mainTab').style.display = 'none';
+    document.getElementById('course').style.display = 'none';
+    document.getElementById('chartTab').style.display = 'none';
+    document.getElementById('aboutTab').style.display = 'block';
+    closeSidebar();
+}
+
+// Открытие мобильной навигации
+function mobileNav() {
+    const sidebar = document.querySelector('.sidebar');
+    const butNav = document.getElementById('button-nav');
+
+    if (sidebar.classList.contains('open')) {
+        sidebar.classList.remove('open');
+        butNav.innerHTML = '<span class="material-symbols-outlined" id="icon_nav_text">menu</span>';
+    } else {
+        sidebar.classList.add('open');
+        butNav.innerHTML = '<span class="material-symbols-outlined" id="icon_nav_text">close</span>';
     }
+}
+
+// Закрытие мобильной навигации
+function closeSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const butNav = document.getElementById('button-nav');
+    const spanText = document.getElementById('icon_nav_text');
+
+    if (sidebar.classList.contains('open')) {
+        sidebar.classList.remove('open');
+        butNav.innerHTML = '<span class="material-symbols-outlined" id="icon_nav_text">menu</span>';
+    }
+}
+
+
+// Функции для файла main-button.php
+// Кнопка выхода из окна удаления
+var cancelButton = document.getElementById("cancelButton");
+// Добавляем обработчик события клика на кнопку "Отмена"
+
+cancelButton.addEventListener("click", function() {
+    closeModal();
 });
 
-// Добавление к Сумме число  
-function addExpense(button) {
-    var row = button.parentNode.parentNode;
-    var amountInput = row.querySelector('.amountInput');
-    var bankAmount = row.querySelector('.bankAmount');
-    var amount = parseFloat(amountInput.value) || 0;
-
-    // Если не было введено значение, не обновляем
-    if (amount === 0) {
-        return;
-    }
-
-    // Обновление суммы в таблице
-    bankAmount.textContent = parseFloat(bankAmount.textContent) + amount;
-    amountInput.value = "";
-
-    // Обновление чисел под нулями
-    updateTotals();
-    updateChart();
+// Функция для открытия модального окна
+function openModal() {
+    var modal = document.getElementById("myModal");
+    modal.style.display = "block";
 }
 
-// Удаление к Сумме число  
-function subtractExpense(button) {
-    var row = button.parentNode.parentNode;
-    var amountInput = row.querySelector('.amountInput');
-    var bankAmount = row.querySelector('.bankAmount');
-    var amount = parseFloat(amountInput.value) || 0;
-
-    // Если не было введено значение, не обновляем
-    if (amount === 0) {
-        return;
-    }
-
-    bankAmount.textContent = parseFloat(bankAmount.textContent) - amount;
-    amountInput.value = "";
-
-    // Обновление чисел под нулями
-    updateTotals();
-    updateChart()
+// Функция для закрытия модального окна
+function closeModal() {
+    var modal = document.getElementById("myModal");
+    modal.style.display = "none";
 }
 
-// Обновление занчений TotalAllTime TotaYear TotalMonth
+// Обновление занчений TotalAllTime
 function updateTotals() {
     // Получение элементов блока с нулями
     var totalAllTime = document.getElementById('totalAllTime');
-    var totalYear = document.getElementById('totalYear');
-    var totalMonth = document.getElementById('totalMonth');
-
-    // Получение значений из столбца "Сумма"
     var amounts = document.querySelectorAll('.bankAmount');
     var sumAllTime = 0;
-    var sumYear = 0;
-    var sumMonth = 0;
 
     amounts.forEach(function(amount) {
         sumAllTime += parseFloat(amount.textContent) || 0;
-        sumYear += parseFloat(amount.textContent) || 0;
-        sumMonth += parseFloat(amount.textContent) || 0;
     });
 
     // Обновление значений
-    totalAllTime.querySelector('span').textContent = sumAllTime;
-    totalYear.querySelector('span').textContent = sumYear;
-    totalMonth.querySelector('span').textContent = sumMonth;
-    updateChart()
-}
-
-// Обновление значение TotalAllTime TotaYear TotalMonth до 0
-function clearTotals() {
-    // Получение элементов блока с нулями
-    var totalAllTime = document.getElementById('totalAllTime');
-    var totalYear = document.getElementById('totalYear');
-    var totalMonth = document.getElementById('totalMonth');
-
-    // Обновление значений
-    totalAllTime.querySelector('span').textContent = '0';
-    totalYear.querySelector('span').textContent = '0';
-    totalMonth.querySelector('span').textContent = '0';
-    updateTotals(); // Добавим вызов функции updateTotals() для обновления значений Totals
-    updateChart(); // Добавим вызов функции updateChart() для обновления диаграммы
-}
-
-// Добавление пустой
-// function addEmptyRow() {
-//     var table = document.getElementById('expenseTable');
-//     var newRow = table.insertRow(table.rows.length);
-//     addRow()
-// }
-
-// Добавление пустой строчки 
-function addRow() {
-    var table = document.getElementById('expenseTable');
-    var newRow = table.insertRow(table.rows.length);
-    newRow.classList.add('new-row');
-
-    var cell1 = newRow.insertCell(0);
-    var bankInput = document.createElement('input');
-    bankInput.type = 'text';
-    bankInput.classList.add('bankInput');
-    bankInput.placeholder = 'Банк';
-    cell1.appendChild(bankInput);
-
-    var cell2 = newRow.insertCell(1);
-    cell2.textContent = "0";
-    cell2.classList.add('bankAmount');
-
-    var cell3 = newRow.insertCell(2);
-    cell3.classList.add('button-container');
-
-    var addButton = document.createElement('button');
-    addButton.textContent = '+';
-    addButton.classList.add('button');
-    addButton.onclick = function() { addExpense(addButton); };
-    cell3.appendChild(addButton);
-
-    var amountInput = document.createElement('input');
-    amountInput.type = 'number';
-    amountInput.classList.add('amountInput');
-    amountInput.placeholder = 'Сумма';
-    cell3.appendChild(amountInput);
-
-    var subtractButton = document.createElement('button');
-    subtractButton.textContent = '-';
-    subtractButton.classList.add('button');
-    subtractButton.onclick = function() { subtractExpense(subtractButton); };
-    cell3.appendChild(subtractButton);
-
-    var deleteButton = document.createElement('button');
-    deleteButton.textContent = '🗑';
-    deleteButton.classList.add('button');
-    deleteButton.onclick = function() { deleteRow(deleteButton); };
-    cell3.appendChild(deleteButton);
-
-    setTimeout(function() {
-        newRow.style.opacity = 1;
-        newRow.style.transform = 'translateY(0)';
-    }, 10);
-    // updateChart()
-}
-
-// Удаление строчки 
-function deleteRow(button) {
-    var row = button.parentNode.parentNode;
-    
-    // Запускаем анимацию перед удалением строки
-    row.style.animation = 'fadeOut 0.3s ease-out forwards';
-    
-    setTimeout(function() {
-        row.parentNode.removeChild(row);
-        updateTotals();
-        updateChart();
-    }, 300); // Время анимации (в миллисекундах), меньше значения в keyframes
-}
-
-// Удаление всех строчек 
-function deleteAllRows() {
-    var table = document.getElementById('expenseTable');
-    var rowCount = table.rows.length;
-
-    // Применяем анимацию к каждой ячейке перед удалением каждой строки
-    for (var i = 1; i < rowCount; i++) {
-        var row = table.rows[i];
-
-        // Применяем анимацию для каждой ячейки в строке
-        for (var j = 0; j < row.cells.length; j++) {
-            var cell = row.cells[j];
-            cell.style.animation = 'fadeOut 0.3s ease-out forwards';
-        }
-
-        // Запускаем анимацию перед удалением строки
-        setTimeout(function(currentRow) {
-            return function() {
-                currentRow.parentNode.removeChild(currentRow);
-                updateTotals();
-                updateChart();
-            };
-        }(row), 300); // Время анимации (в миллисекундах), меньше значения в keyframes
-    }
-    addRow();
+    totalAllTime.querySelector('.ZeroTotalAllTime').textContent = sumAllTime;
+    updateChart();
 }
 
 // Поиск банка
 function searchBanks() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("searchInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("expenseTable");
-    tr = table.getElementsByTagName("tr");
+    // Получаем значение введенное пользователем
+    var searchText = document.getElementById("searchInput").value.toUpperCase();
 
-    for (i = 0; i < tr.length; i++) { // Начинаем с 1, чтобы пропустить заголовок
-        td = tr[i].getElementsByTagName("td")[0]; // Ищем по первой ячейке (банку)
-        if (td) {
-            txtValue = td.querySelector('.bankInput').value.toUpperCase();
-            if (txtValue.indexOf(filter) > -1) {
-                tr[i].style.display = ""; // Показываем строку
+    // Получаем таблицу и её строки
+    var table = document.querySelector('.content-table');
+    var rows = table.getElementsByTagName('tr');
+
+    // Проходимся по строкам таблицы и скрываем те, которые не соответствуют поисковому запросу
+    for (var i = 0; i < rows.length; i++) {
+        var bankNameCell = rows[i].getElementsByTagName('td')[0]; // ячейка с названием банка
+        if (bankNameCell) {
+            var bankName = bankNameCell.textContent || bankNameCell.innerText;
+            if (bankName.toUpperCase().indexOf(searchText) > -1) {
+                rows[i].style.display = '';
             } else {
-                tr[i].style.display = "none"; // Скрываем строку
+                rows[i].style.display = 'none';
             }
         }
     }
-    // updateChart()
 }
 
-// Обновление диаграммы
+// Функция для файла layout_bank.php
+// Кнопка удаления строчки
+function deleteRow(button) {
+    var row = $(button).closest('tr'); // Находим ближайшую строку (tr)
+    var bankNameElement = row.find('td:nth-child(1) p');
+    if (!bankNameElement.length) {
+        console.error("Bank name element not found.");
+        return;
+    }
+
+    var bankName = bankNameElement.text().trim().toLowerCase(); // Получаем название банка из первой ячейки строки
+    if (!bankName) {
+        console.error("Bank name not found.");
+        return;
+    }
+
+    // Отправляем запрос на сервер для удаления строки
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', './vendor/delete_value.php', true); // Укажите правильный путь к вашему серверному обработчику
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                row.remove();
+                location.reload();
+            } else {
+                console.error("Request failed: " + xhr.statusText);
+            }
+        }
+    };
+    xhr.send('update_value=0&bank=' + encodeURIComponent(bankName)); // Отправляем данные на сервер, указывая название банка и значение для обновления
+    updateTotals();
+}
+
+// Кнопка удаления всех строчек
+function deleteAllRows() {
+    var tableContainers = document.querySelectorAll('.table-container'); 
+    
+    // Проходимся по всем контейнерам таблиц
+    tableContainers.forEach(function(tableContainer) {
+        var contentTable = tableContainer.querySelector('.content-table'); 
+        var tbody = contentTable.querySelectorAll('tbody'); 
+        
+        // Проходимся по всем tbody и удаляем их
+        tbody.forEach(function(tbody) {
+            var rows = tbody.querySelectorAll('tr'); // Получаем все строки таблицы
+
+            // Проходимся по всем строкам и удаляем их
+            rows.forEach(function(row) {
+                row.remove(); // Удаляем найденную строку
+    
+                // Отправляем запрос на сервер для обновления значения в базе данных
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', './vendor/delete_all_value.php', true); // Укажите правильный путь к вашему серверному обработчику
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            console.log(xhr.responseText);
+                            // После успешного обновления, перезагрузить страницу
+                            location.reload();
+                        } else {
+                            console.error("Request failed: " + xhr.statusText);
+                        }
+                    }
+                };
+                xhr.send('update_value=0'); // Отправляем данные на сервер, указывая, что значение должно быть обновлено до 0
+                closeModal();
+            });
+        updateTotals();
+        });
+    });
+}
+
+// Открытие макеты банка
+function modalCreateBank() {
+    var modal = document.getElementById('layout-modal');
+    modal.style.display = 'block';
+    document.addEventListener('click', closeModalCreateBank);
+}
+
+// Закрытие окна макеты банка
+function closeModalCreateBank(event) {
+    var modal = document.getElementById('layout-modal');
+    if (event.target == modal) {
+        modal.style.display = 'none';
+        document.removeEventListener('click', closeModalCreateBank);
+    }
+}
+
+// Функция добавления суммы в строчку 
+function addExpense(button) {
+    var bank = button.closest('.bank').querySelector('.select-bank').value;
+    var amount = button.closest('.bank').querySelector('.amountInput').value;
+    
+    if (bank.trim() == 'BANK') {
+        return alert("Выберите банк");
+    }
+
+    if (amount.trim() !== '') {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "./vendor/add_amount.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+                    // После успешного обновления, перезагрузить страницу
+                    location.reload();
+                } else {
+                    console.error("Request failed: " + xhr.statusText);
+                }
+            }
+        };
+        // Send the request with proper data
+        var data = "bank=" + encodeURIComponent(bank) + "&amount=" + encodeURIComponent(amount);
+        xhr.send(data);
+    } else {
+        alert("Введите сумму");
+    }
+}
+
+// Функция удаления суммы из строчке
+function subtractExpense(button) {
+    var bank = button.closest('.bank').querySelector('.select-bank').value;
+    var amount = button.closest('.bank').querySelector('.amountInput').value;
+    
+    if (bank.trim() == 'BANK') {
+        return alert("Выберите банк");
+    }
+
+    if (amount.trim() !== '') {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "./vendor/sub_amount.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+                    // После успешного обновления, перезагрузить страницу
+                    location.reload();
+                } else {
+                    console.error("Request failed: " + xhr.statusText);
+                }
+            }
+        };
+        // Send the request with proper data
+        var data = "bank=" + encodeURIComponent(bank) + "&amount=" + encodeURIComponent(amount);
+        xhr.send(data);
+    } else {
+        alert("Введите сумму");
+    }
+}
+
+
+// Функция для файла chart.php
+// Подключение диаграммы
+const ctx = document.getElementById('myChart');
+var chart;
+
+// Обновление Bar, Pie, Line Charts
 function updateChart(containerId, chartType) {
     var data = [];
     var sumByBank = {};
 
     // Получение данных из таблицы
-    var rows = document.querySelectorAll('#expenseTable tr:not(:first-child)');
+    var rows = document.querySelectorAll('.content-table tbody tr');
     rows.forEach(function(row) {
-        var bankInput = row.querySelector('.bankInput');
-        var bank = bankInput.value.trim().toLowerCase();
-        var amount = parseFloat(row.querySelector('.bankAmount').textContent) || 0;
+        var bankName = row.querySelector('td:first-child #name_bank').textContent.trim(); // Получаем название банка
+        var amount = parseFloat(row.querySelector('.bankAmount').textContent) || 0; // Получаем сумму
 
-        if (bank !== '' && amount !== 0) {
-            sumByBank[bank] = (sumByBank[bank] || 0) + amount;
+        if (bankName !== '' && amount !== 0) {
+            sumByBank[bankName] = (sumByBank[bankName] || 0) + amount;
         }
     });
 
@@ -240,9 +322,8 @@ function updateChart(containerId, chartType) {
 
     var ctx = document.getElementById(containerId).getContext('2d');
 
-    
     chart = new Chart(ctx, {
-        type: `${chartType}`,
+        type: chartType,
         data: {
             labels: data.map(item => item.bank),
             datasets: [{
@@ -253,17 +334,20 @@ function updateChart(containerId, chartType) {
                 borderWidth: 1
             }]
         },
-        options: {
-
-        }
+        options: {}
     });
-} 
-
-// Цвета у диааммы Pie
+}
+// Цвета у диаграммы Pie
 function getBackgroundColor(chartType) {
     switch (chartType) {
         case 'pie':
-            return ['#DC143C', '#2F4F4F' , '#EEE8AA', '#C0C0C0', '#FF1493', '#FF4500','#00FFFF', '#FFA500', '#8B008B', '#EEE8AA', '#FFFF00', '#DDA0DD', '#DA70D6', '#FFF8DC', '#0000FF','#FFD700', '#00FFFF', '#808080', '#ADFF2F','#7FFF00', '#808000', '#7B68EE'];
+            return ['#DC143C', '#2F4F4F' , '#EEE8AA', 
+                    '#C0C0C0', '#FF1493', '#FF4500', 
+                    '#00FFFF', '#FFA500', '#8B008B', 
+                    '#EEE8AA', '#FFFF00', '#DDA0DD', 
+                    '#DA70D6', '#FFF8DC', '#0000FF', 
+                    '#FFD700', '#00FFFF', '#808080', 
+                    '#ADFF2F','#7FFF00', '#808000', '#7B68EE'];
     }
 }
 
@@ -285,7 +369,6 @@ function showModal(title, containerId,) {
     updateChart(containerId, chartType);
     
     var modalOverlay = document.getElementById('modal-overlay');
-    var modal = document.getElementById('modal');
     var modalTitle = document.getElementById('modal-title');
 
     modalTitle.textContent = title;
@@ -293,40 +376,22 @@ function showModal(title, containerId,) {
     modalOverlay.style.display = 'flex';
 }
 
-// Скрытие диаграммное окно 
-function hideModal() {
-    var modalOverlay = document.getElementById('modal-overlay');
-    modalOverlay.style.display = 'none';
+
+// Функция для файла about.html
+// Открытие окна OOPSE
+function Ooopse(social) {
+    var modal = document.getElementById('Ooopse-Modal');
+    var socialElement = document.getElementById('social');
+    socialElement.textContent = social;
+    modal.style.display = 'block';
+    document.addEventListener('click', closeModalOutside);
 }
 
-const ctx = document.getElementById('myChart');
-var chart;
-
-function showMainTab() {
-    document.getElementById('mainTab').style.display = 'block';
-    document.getElementById('chartTab').style.display = 'none';
-    document.getElementById('aboutTab').style.display = 'none';
-    document.getElementById('course').style.display = 'none';
-}
-    
-function showChartTab() {
-    document.getElementById('mainTab').style.display = 'none';
-    document.getElementById('chartTab').style.display = 'block';
-    document.getElementById('aboutTab').style.display = 'none';
-    document.getElementById('course').style.display = 'none';
-    updateChart();
-}
-    
-function showAboutUsTab(){
-    document.getElementById('mainTab').style.display = 'none';
-    document.getElementById('chartTab').style.display = 'none';
-    document.getElementById('aboutTab').style.display = 'block';
-    document.getElementById('course').style.display = 'none';
-}
-
-function showCourseTab(){
-    document.getElementById('mainTab').style.display = 'none';
-    document.getElementById('chartTab').style.display = 'none';
-    document.getElementById('aboutTab').style.display = 'none';
-    document.getElementById('course').style.display = 'block';
+// Закрытие окна OOPSE
+function closeModalOutside(event) {
+    var modal = document.getElementById('Ooopse-Modal');
+    if (event.target == modal) {
+        modal.style.display = 'none';
+        document.removeEventListener('click', closeModalOutside);
+    }
 }
